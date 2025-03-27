@@ -2,18 +2,21 @@ import { useState } from "react";
 
 export default function App5() {
   const [todos, setTodos] = useState([]);
-  const [task, setTask] = useState(""); 
+  const [task, setTask] = useState("");
+
   const handleSubmit = () => {
-    if (task.trim() !== "") { 
+    if (task.trim()) {
       setTodos([...todos, task]);
-      setTask(""); 
+      setTask(""); // Clear input after submission
     }
   };
 
-  const handleDelete = (productToDelete) => {
-    setProducts(products.filter((product) => product !== productToDelete));
+  const handleDelete = (taskToDelete) => {
+    const index = todos.findIndex((task) => task === taskToDelete);
+    if (index !== -1) {
+      setTodos(todos.filter((_, i) => i !== index));
+    }
   };
-
 
   return (
     <div>
@@ -21,21 +24,20 @@ export default function App5() {
       <p>
         <input
           type="text"
-          value={task} 
+          value={task}
           onChange={(e) => setTask(e.target.value)}
-          placeholder="Enter Task"
+          placeholder="Enter task"
         />
         <button onClick={handleSubmit}>Submit</button>
+        <hr />
+        <ul>
+          {todos.map((value, index) => (
+            <li key={index}>
+              {value} - <button onClick={() => handleDelete(value)}>Delete</button>
+            </li>
+          ))}
+        </ul>
       </p>
-      <hr />
-      <ul>
-        {todos.map((value, index) => (
-          <li key={index}>
-            {value} -{" "}
-            <button onClick={() => handleDelete(value)}>Delete</button> 
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
